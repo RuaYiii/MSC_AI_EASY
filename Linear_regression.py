@@ -2,7 +2,8 @@ import csv
 import numpy as np
 from pathlib import Path
 import math
-import 
+import matplotlib.pyplot as plt
+from mpl_toolkits.mplot3d import Axes3D
 def init_data():
     path="Dataset/mlm.csv" 
     csv_file=open(path,'r')
@@ -118,12 +119,35 @@ def denormalizeweightsBias(w,b,data_norm):
     return w,b
 def test(data,lable,w,b,i,lable_m,lable_min):
     z=np.dot(data[i,:],w)+b
-    print((w[0,0]*lable_m+lable_min)/data[i,0])
+    w1=w[0,0]*lable_m
+    w2=w[1,0]*lable_m
+    c_=b[0,0]*lable_m+lable_min
+    
     #print(f"z= {w[0,0]}x + {w[1,0]}y + {b[0][0]}= {z[0][0]}")
-    print(f"呜呜呜 预测的 {z[0][0]*lable_m+lable_min}")
+    print(f"呜呜呜 预测的 {(z[0][0]*lable_m)+lable_min}")
     print(f"呜呜呜 实际的 {lable[i][0]}")
     print(f'别人家的结果{4.021347*data[i,0]+-3.770851*data[i,1]+4.302547}')
     print("--------------------------")
+    print(f"最终模型：z={w1}x{w1}y+{c_}")
+    return w1,w2,c_
+def Model_visualization(w1,w2,b):
+    x = np.linspace(0, 100, 10)
+    y = np.linspace(0, 100, 10)
+    x_mesh, y_mesh = np.meshgrid(x, y, indexing='ij')
+    z_mesh = w1 * x_mesh + w2 * y_mesh + b   # 拟合平面方程
+    path="Dataset/mlm.csv"
+
+    fig = plt.figure(figsize=(10, 10))
+    sub = fig.add_subplot(111, projection='3d')
+    sub.plot_surface(x_mesh, y_mesh, z_mesh, color='0.999', alpha=0.4)  # 绘制平面方程
+    sub.set_xlabel(r'$x$')
+    sub.set_ylabel(r'$y$')
+    sub.set_zlabel(r'$z$')
+    sub.view_init(elev=45, azim=0)  # 初始观看角度
+    x1, y1, z1 = np.loadtxt(path, delimiter=',', skiprows=1, usecols=(0, 1, 2), unpack=True)
+    # 导入数据
+    sub.scatter(x1, y1, z1, color='r', s=1)  # 绘制散点图
+    plt.show()
 if __name__ == "__main__":
     data,lable=init_data() #返回list
     data,lable= read_data(data,lable)#返回numpy对象
@@ -131,6 +155,5 @@ if __name__ == "__main__":
     w,b=train(data_new,lable_new)#训练
     w,b=denormalizeweightsBias(w,b,data_norm)#还原参数值
     #差点东西 训练的还是调参的 呜呜呜
-    for i in range(1): #看你需要
-        test(data,lable,w,b,i,lable_m,lable_min)
-    
+    w1,w2,b=test(data,lable,w,b,1,lable_m,lable_min)#测试 以及 输出最终模型
+    Model_visualization(w1,w2,b)#模型可视化
