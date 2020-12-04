@@ -157,3 +157,4 @@ if __name__ == "__main__":
     #差点东西 训练的还是调参的 呜呜呜
     w1,w2,b=test(data,lable,w,b,1,lable_m,lable_min)#测试 以及 输出最终模型
     Model_visualization(w1,w2,b)#模型可视化
+    pass
