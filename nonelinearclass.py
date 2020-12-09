@@ -366,7 +366,7 @@ if __name__ == "__main__":
     #fig= plt.figure(figsize=(6,6))
     data.normalize_x() #这个地方让xtrain的shape变了
     #data.shuffle()
-    data.GenerateValidationSet()  #这里有点子问题————暂时舍弃
+    data.GenerateValidationSet()  
     n_input= data.num_feature
     n_ouput= data.num_category
     n_hidden=3  
