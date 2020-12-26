@@ -184,7 +184,7 @@ class loss_func(object): #loss函数
         LOSS = np.sum(-p2) 
         loss = LOSS / count
         return loss
-class reader(object): #质检合格
+class reader(object): 
     def __init__(self,path):
         self.path=path
         self.num_train=0
@@ -375,6 +375,6 @@ if __name__ == "__main__":
     hp=HyperParameters(n_input,n_ouput,n_hidden,eta,max_epoch,batch_sz,eps,
     NetType.MultipleClassifier, InitialMethod.Xavier)
     net= NeuralNet(hp,"I_don't_know")   
-    net.load_result() #怪 就鸡儿怪 没有w1,w2我读取个屁哦
+    net.load_result() 
     net.train(data,100,True)
     #可视化
